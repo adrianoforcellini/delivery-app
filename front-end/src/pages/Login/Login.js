@@ -35,13 +35,11 @@ function Login() {
   };
 
   const redirectCostummer = () => {
-    console.log('oi');
     history.push('/costumer');
   };
   const login = () => {
     socket.emit('login', { email, password });
     socket.on('login', (data) => {
-      console.log(data);
       if (!data) {
         setInvalidLogin(true);
         return null;
