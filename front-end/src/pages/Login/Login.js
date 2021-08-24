@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import './Login.css';
+import { useHistory } from 'react-router-dom';
 
 import socket from '../../utills/io';
-
+// invalidLogin: `[data-testid='${prefix}element-invalid-email']`
 function Login() {
-  const [user, setUser] = useState('');
+  const [email, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [isDisabled, trueOrFalse] = useState(true);
+  const [invalidLogin, setInvalidLogin] = useState(false);
+  // const [validLogin, setValidLogin] = useState(false);
+
   const prefix = 'common_login__';
   const passMin = 5;
-  socket.on('FromAPI', (data) => {
-    console.log(data);
-  });
+  const history = useHistory();
 
   const verifyDisabled = () => {
     const re = /(.+)@(.+){2,}\.(.+){2,}/;
-    if (password.length >= passMin && re.test(user)) {
+    if (password.length >= passMin && re.test(email)) {
       trueOrFalse(false);
     } else {
       trueOrFalse(true);
@@ -32,19 +34,30 @@ function Login() {
     verifyDisabled();
   };
 
+  const redirectCostummer = () => {
+    console.log('oi');
+    history.push('/costumer');
+  };
   const login = () => {
-    socket.emit('login', { user, password });
+    socket.emit('login', { email, password });
+    socket.on('login', (data) => {
+      console.log(data);
+      if (!data) {
+        setInvalidLogin(true);
+        return null;
+      }redirectCostummer();
+    });
   };
 
   return (
     <div className="login-Page">
       <input
-        className="user-input"
-        name="user"
-        value={ user }
+        className="email-input"
+        name="email"
+        value={ email }
         data-testid={ `${prefix}input-email` }
         onChange={ userChange }
-        placeholder="User Name"
+        placeholder="User Email"
       />
       <input
         className="password-input"
@@ -71,6 +84,9 @@ function Login() {
         >
           Ainda não tenho conta
         </button>
+        {invalidLogin
+          ? <div data-testid={ `${prefix}element-invalid-email` }>LOGIN INVALIDO </div>
+          : <div />}
       </div>
     </div>
   );

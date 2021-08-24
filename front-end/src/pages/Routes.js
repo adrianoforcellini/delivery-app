@@ -12,6 +12,7 @@ function Routes() {
     <Router>
       <Switch>
         <Route path="/login" component={ Login } />
+        <Route path="/costumer" component={ Login } />
         <Redirect from="/" to="/login" />
       </Switch>
     </Router>
