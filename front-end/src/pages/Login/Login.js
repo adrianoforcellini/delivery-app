@@ -3,13 +3,12 @@ import './Login.css';
 import { useHistory } from 'react-router-dom';
 
 import socket from '../../utills/io';
-// invalidLogin: `[data-testid='${prefix}element-invalid-email']`
+
 function Login() {
   const [email, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [isDisabled, trueOrFalse] = useState(true);
   const [invalidLogin, setInvalidLogin] = useState(false);
-  // const [validLogin, setValidLogin] = useState(false);
 
   const prefix = 'common_login__';
   const passMin = 5;
